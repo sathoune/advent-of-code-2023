@@ -28,20 +28,8 @@ func convertFoundNumber(number string) (converted int) {
 	return
 }
 
-func findFirstNumber(text string, numbers *regexp.Regexp) int {
-	matched := numbers.FindString(text)
-	if len(matched) == 0 {
-		return 0
-	}
-	return convertFoundNumber(matched)
-}
-func findLastNumber(text string, reverseNumbers *regexp.Regexp) int {
-	r := reverseString(text)
-	matched := reverseNumbers.FindString(r)
-	if len(matched) == 0 {
-		return 0
-	}
-	return convertFoundNumber(reverseString(matched))
+func findFirstOccurrence(text string, pattern *regexp.Regexp) string {
+	return pattern.FindString(text)
 }
 
 func reverseString(s string) (reversed string) {
@@ -54,33 +42,42 @@ func reverseString(s string) (reversed string) {
 func createSearchPatterns() (forward *regexp.Regexp, reverse *regexp.Regexp) {
 	var numbers = make([]string, len(numbersLookup)+1)
 	var reverseNumbers = make([]string, len(numbersLookup)+1)
+
 	index := 0
 	for key := range numbersLookup {
 		numbers[index] = key
 		reverseNumbers[index] = reverseString(key)
 		index++
 	}
+
 	numbers[len(numbersLookup)] = "[0-9]"
-	reverseNumbers[len(numbersLookup)] = "[0-9]"
 	forward = regexp.MustCompile(strings.Join(numbers, "|"))
+
+	reverseNumbers[len(numbersLookup)] = "[0-9]"
 	reverse = regexp.MustCompile(strings.Join(reverseNumbers, "|"))
 
 	return
-
 }
 
 func Part2() {
-	forwardPattern, reversePattern := createSearchPatterns()
 	filePath := filepath.Join(thisDirectory(), "input.txt")
 	formattedData := readFile(filePath)
 
+	forwardPattern, reversePattern := createSearchPatterns()
 	sum := 0
 	for _, line := range formattedData {
-
-		firstInteger := findFirstNumber(line, forwardPattern)
-		lastInteger := findLastNumber(line, reversePattern)
-		sum += firstInteger * 10
-		sum += lastInteger
+		firstInteger := findFirstOccurrence(
+			line,
+			forwardPattern,
+		)
+		lastInteger := reverseString(
+			findFirstOccurrence(
+				reverseString(line),
+				reversePattern,
+			),
+		)
+		sum += convertFoundNumber(firstInteger) * 10
+		sum += convertFoundNumber(lastInteger)
 
 	}
 	fmt.Println(sum)
