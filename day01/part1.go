@@ -1,4 +1,4 @@
-package main
+package day01
 
 import (
 	"errors"
@@ -31,8 +31,8 @@ func findFirstAndLastDigit(text string) (first int, last int, notFound error) {
 	return
 }
 
-func main() {
-	inputName := "day-01/input.txt"
+func Part1() {
+	inputName := "day01/input.txt"
 	formattedData := readFile(inputName)
 	sum := 0
 	for _, line := range formattedData {
