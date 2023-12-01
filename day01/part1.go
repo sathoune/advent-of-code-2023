@@ -4,10 +4,20 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 )
+
+func thisDirectory() string {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("no caller info")
+	}
+	return filepath.Dir(filename)
+}
 
 func readFile(fileName string) []string {
 	data, err := os.ReadFile(
@@ -32,8 +42,8 @@ func findFirstAndLastDigit(text string) (first int, last int, notFound error) {
 }
 
 func Part1() {
-	inputName := "day01/input.txt"
-	formattedData := readFile(inputName)
+	filePath := filepath.Join(thisDirectory(), "input.txt")
+	formattedData := readFile(filePath)
 	sum := 0
 	for _, line := range formattedData {
 		firstInteger, lastInteger, _ := findFirstAndLastDigit(line)
