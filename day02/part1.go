@@ -87,18 +87,24 @@ func validateGame(game Game) (valid bool) {
 	return true
 }
 
+func parseGames(text []string) (grouped map[int]Game) {
+	grouped = make(map[int]Game)
+	for _, line := range text {
+		id, game := splitIntoChunks(line)
+		grouped[id] = game
+	}
+
+	return
+}
+
 func Part1() {
 	_, thisFilepath, _, _ := runtime.Caller(0)
 	dataFilepath := filepath.Join(filepath.Dir(thisFilepath), "input.txt")
 	txt := utils.ReadFile(dataFilepath)
 
-	grouped := make(map[int]Game)
-	for _, line := range txt {
-		id, game := splitIntoChunks(line)
-		grouped[id] = game
-	}
+	games := parseGames(txt)
 	sum := 0
-	for id, game := range grouped {
+	for id, game := range games {
 		valid := validateGame(game)
 		if valid {
 			sum += id

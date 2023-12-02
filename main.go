@@ -14,6 +14,7 @@ var availableSolutions = map[int]map[int]func(){
 	},
 	2: {
 		1: day02.Part1,
+		2: day02.Part2,
 	},
 }
 
