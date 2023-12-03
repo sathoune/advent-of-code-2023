@@ -116,23 +116,17 @@ func Part2() {
 		matchedNumbers := findNumbersForDigits(digitsAroundGear, numbersCoordinates)
 		numbersAroundGears[gearIndex] = matchedNumbers
 	}
-	numbersAroundValidGears := make([][]Number, len(gears))
-	for gearIndex, numbersAroundGear := range numbersAroundGears {
+
+	gearsPower := 0
+	for _, numbersAroundGear := range numbersAroundGears {
 		if validGear(numbersAroundGear) {
-			numbersAroundValidGears[gearIndex] = numbersAroundGear
-		}
-	}
-
-	gearPower := 0
-	for _, gearNumbers := range numbersAroundValidGears {
-		if gearNumbers != nil {
-			power := 1
-			for _, number := range gearNumbers {
-				power *= number.value
+			gearPower := 1
+			for _, number := range numbersAroundGear {
+				gearPower *= number.value
 			}
-			gearPower += power
+			gearsPower += gearPower
 		}
-
 	}
-	fmt.Println(gearPower)
+
+	fmt.Println(gearsPower)
 }
