@@ -104,16 +104,13 @@ func Part2() {
 	txt := utils.ReadFile(dataFilepath)
 
 	gears := findAllGears(txt)
-
-	digitsAroundGears := make([][]Coordinate, len(gears))
-	for gearIndex, gear := range gears {
-		digitsAroundGears[gearIndex] = findDigitsAroundGear(gear, txt)
-	}
-
 	numbersCoordinates := findDigitsInRows(txt)
 	numbersAroundGears := make([][]Number, len(gears))
-	for gearIndex, digitsAroundGear := range digitsAroundGears {
-		matchedNumbers := findNumbersForDigits(digitsAroundGear, numbersCoordinates)
+	for gearIndex, gear := range gears {
+		matchedNumbers := findNumbersForDigits(
+			findDigitsAroundGear(gear, txt),
+			numbersCoordinates,
+		)
 		numbersAroundGears[gearIndex] = matchedNumbers
 	}
 
