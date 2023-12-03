@@ -21,7 +21,7 @@ type Coordinate struct {
 	y int
 }
 
-func findDigitsInRows(matrix []string) (digits []Number) {
+func findNumbersInRows(matrix []string) (numbers []Number) {
 	pattern := regexp.MustCompile(`\d+`)
 
 	for rowIndex, row := range matrix {
@@ -30,7 +30,7 @@ func findDigitsInRows(matrix []string) (digits []Number) {
 			start, end := coordinates[0], coordinates[1]
 			parsedNumber, _ := strconv.Atoi(row[start:end])
 
-			digits = append(digits, Number{
+			numbers = append(numbers, Number{
 				rowIndex,
 				start,
 				end,
@@ -129,14 +129,15 @@ func checkIfAnEnginePart(partCandidate Number, matrix []string) bool {
 	}
 	return false
 }
+
 func Part1() {
 	_, thisFilepath, _, _ := runtime.Caller(0)
 	dataFilepath := filepath.Join(filepath.Dir(thisFilepath), "input.txt")
 	txt := utils.ReadFile(dataFilepath)
 
-	digitsCoordinates := findDigitsInRows(txt)
+	numbersCoordinates := findNumbersInRows(txt)
 	sum := 0
-	for _, partCandidate := range digitsCoordinates {
+	for _, partCandidate := range numbersCoordinates {
 		if checkIfAnEnginePart(partCandidate, txt) {
 			sum += partCandidate.value
 		}

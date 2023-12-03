@@ -30,12 +30,12 @@ func findNumbersInCoordinates(
 	matrix []string,
 ) (numbersAround []Coordinate) {
 	pattern := regexp.MustCompile("[0-9]")
+
 	for _, coordinate := range coordinates {
 		if pattern.FindString(string(matrix[coordinate.y][coordinate.x])) != "" {
 			numbersAround = append(numbersAround, coordinate)
 		}
 	}
-
 	return
 }
 
@@ -51,29 +51,22 @@ func findDigitsAroundGear(
 	return findNumbersInCoordinates(coordinatesAround, matrix)
 }
 
-func coordinateInNumber(coordinate Coordinate, number Number) bool {
-	if coordinate.y != number.row {
-		return false
-	}
-	if coordinate.x < number.start {
-		return false
-	}
-	if coordinate.x >= number.end {
-		return false
-	}
-	return true
-}
-
 func findDigitInNumbers(coordinate Coordinate, numbers []Number) Number {
 	for _, number := range numbers {
-		if coordinateInNumber(coordinate, number) {
+		yMatches := coordinate.y == number.row
+		startMatches := coordinate.x < number.start
+		endMatches := coordinate.x >= number.end
+		if yMatches && startMatches && endMatches {
 			return number
 		}
 	}
 	return Number{}
 }
 
-func numberExist(number Number, numbers []Number) bool {
+func numberExist(
+	number Number,
+	numbers []Number,
+) bool {
 	for _, n := range numbers {
 		if number == n {
 			return true
@@ -81,6 +74,7 @@ func numberExist(number Number, numbers []Number) bool {
 	}
 	return false
 }
+
 func findNumbersForDigits(
 	digits []Coordinate,
 	numbers []Number,
@@ -94,29 +88,25 @@ func findNumbersForDigits(
 	return
 }
 
-func validGear(numbers []Number) bool {
-	return len(numbers) > 1
-}
-
 func Part2() {
 	_, thisFilepath, _, _ := runtime.Caller(0)
 	dataFilepath := filepath.Join(filepath.Dir(thisFilepath), "input.txt")
 	txt := utils.ReadFile(dataFilepath)
 
 	gears := findAllGears(txt)
-	numbersCoordinates := findDigitsInRows(txt)
+	numbers := findNumbersInRows(txt)
 	numbersAroundGears := make([][]Number, len(gears))
 	for gearIndex, gear := range gears {
 		matchedNumbers := findNumbersForDigits(
 			findDigitsAroundGear(gear, txt),
-			numbersCoordinates,
+			numbers,
 		)
 		numbersAroundGears[gearIndex] = matchedNumbers
 	}
 
 	gearsPower := 0
 	for _, numbersAroundGear := range numbersAroundGears {
-		if validGear(numbersAroundGear) {
+		if len(numbersAroundGear) > 1 {
 			gearPower := 1
 			for _, number := range numbersAroundGear {
 				gearPower *= number.value
