@@ -72,6 +72,7 @@ func findDigitInNumbers(coordinate Coordinate, numbers []Number) Number {
 	}
 	return Number{}
 }
+
 func numberExist(number Number, numbers []Number) bool {
 	for _, n := range numbers {
 		if number == n {
@@ -80,7 +81,7 @@ func numberExist(number Number, numbers []Number) bool {
 	}
 	return false
 }
-func matchDigitsWithNumber(
+func findNumbersForDigits(
 	digits []Coordinate,
 	numbers []Number,
 ) (matchedNumbers []Number) {
@@ -93,7 +94,7 @@ func matchDigitsWithNumber(
 	return
 }
 
-func gearValid(numbers []Number) bool {
+func validGear(numbers []Number) bool {
 	return len(numbers) > 1
 }
 
@@ -104,33 +105,34 @@ func Part2() {
 
 	gears := findAllGears(txt)
 
-	var digitsAroundGears [][]Coordinate
-	for _, gear := range gears {
-		digitsAroundGears = append(
-			digitsAroundGears,
-			findDigitsAroundGear(gear, txt),
-		)
+	digitsAroundGears := make([][]Coordinate, len(gears))
+	for gearIndex, gear := range gears {
+		digitsAroundGears[gearIndex] = findDigitsAroundGear(gear, txt)
 	}
 
 	numbersCoordinates := findDigitsInRows(txt)
-	var numbersAroundGears [][]Number
-	for _, digitsAroundGear := range digitsAroundGears {
-		matchedNumbers := matchDigitsWithNumber(digitsAroundGear, numbersCoordinates)
-		numbersAroundGears = append(numbersAroundGears, matchedNumbers)
+	numbersAroundGears := make([][]Number, len(gears))
+	for gearIndex, digitsAroundGear := range digitsAroundGears {
+		matchedNumbers := findNumbersForDigits(digitsAroundGear, numbersCoordinates)
+		numbersAroundGears[gearIndex] = matchedNumbers
 	}
-	var numbersAroundValidGears [][]Number
-	for _, numbersAroundGear := range numbersAroundGears {
-		if gearValid(numbersAroundGear) {
-			numbersAroundValidGears = append(numbersAroundValidGears, numbersAroundGear)
+	numbersAroundValidGears := make([][]Number, len(gears))
+	for gearIndex, numbersAroundGear := range numbersAroundGears {
+		if validGear(numbersAroundGear) {
+			numbersAroundValidGears[gearIndex] = numbersAroundGear
 		}
 	}
+
 	gearPower := 0
 	for _, gearNumbers := range numbersAroundValidGears {
-		power := 1
-		for _, number := range gearNumbers {
-			power *= number.value
+		if gearNumbers != nil {
+			power := 1
+			for _, number := range gearNumbers {
+				power *= number.value
+			}
+			gearPower += power
 		}
-		gearPower += power
+
 	}
 	fmt.Println(gearPower)
 }
