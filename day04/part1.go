@@ -50,7 +50,7 @@ func toDayMap(data []string) (scratchPads map[int]Scratchpad) {
 			winningMap[number] = number
 		}
 
-		scratchPads[index] = Scratchpad{
+		scratchPads[index+1] = Scratchpad{
 			winningMap,
 			scratched,
 		}
