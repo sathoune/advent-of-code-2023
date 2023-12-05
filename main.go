@@ -6,6 +6,7 @@ import (
 	"advent-of-code-2023/day02"
 	"advent-of-code-2023/day03"
 	"advent-of-code-2023/day04"
+	"advent-of-code-2023/day05"
 	"fmt"
 )
 
@@ -25,6 +26,10 @@ var availableSolutions = map[int]map[int]func(){
 	4: {
 		1: day04.Part1,
 		2: day04.Part2,
+	},
+	5: {
+		1: day05.Part1,
+		2: day05.Part2,
 	},
 }
 
