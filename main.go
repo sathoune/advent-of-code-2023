@@ -30,6 +30,7 @@ var availableSolutions = map[int]map[int]func(){
 	5: {
 		1: day05.Part1,
 		2: day05.Part2,
+		3: day05.Part2reimagined,
 	},
 }
 
