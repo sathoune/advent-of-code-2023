@@ -65,7 +65,7 @@ func gatherMaps(text []string) (converters []ConversionMap) {
 		}
 	}
 	converters = append(converters, currentConverter)
-	return converters[1:len(converters)]
+	return converters[1:]
 }
 
 func findLocation(seed int, conversions []ConversionMap) (destination int) {
@@ -78,7 +78,7 @@ func findLocation(seed int, conversions []ConversionMap) (destination int) {
 
 func findMinimum(numbers []int) int {
 	minimal := numbers[0]
-	for _, number := range numbers[1:len(numbers)] {
+	for _, number := range numbers[1:] {
 		if number < minimal {
 			minimal = number
 		}
@@ -90,9 +90,10 @@ func Part1() {
 	_, thisFilepath, _, _ := runtime.Caller(0)
 	dataFilepath := filepath.Join(filepath.Dir(thisFilepath), "input.txt")
 	data := utils.ReadFile(dataFilepath)
+
 	seedsData := data[0]
 	seeds := parseSeeds(seedsData)
-	rest := data[1:len(data)]
+	rest := data[1:]
 	maps := gatherMaps(rest)
 
 	locations := make([]int, 0)
